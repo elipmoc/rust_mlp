@@ -1,0 +1,6 @@
+[package]
+name = "rust_mlp"
+version = "0.1.0"
+authors = ["elipmoc <relipmoc101@gmail.com>"]
+
+[dependencies]
