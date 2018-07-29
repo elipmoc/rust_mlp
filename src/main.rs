@@ -1,36 +1,26 @@
-trait PerceptronI {
-    fn output(&self, input: f64) -> f64;
+use std::collections::HashMap;
+
+struct Model {
+    w: HashMap<(usize, usize, usize, usize), f64>,
+    layer_nums: Vec<usize>,
 }
-
-struct Perceptron<T: PerceptronI> {
-    inputs: Vec<Input<T>>,
-}
-
-impl<T: PerceptronI> PerceptronI for Perceptron<T> {
-    fn output(&self, input: f64) -> f64 {
-        self.inputs
-            .iter()
-            .map(|x| x.get(input))
-            .fold(0.0, |acc, x| acc + x)
-    }
-}
-
-struct InputPerceptron {}
-
-impl PerceptronI for InputPerceptron {
-    fn output(&self, input: f64) -> f64 {
-        input
-    }
-}
-
-struct Input<T: PerceptronI> {
-    w: f64,
-    p: T,
-}
-
-impl<T: PerceptronI> Input<T> {
-    fn get(&self, input: f64) -> f64 {
-        self.p.output(input) * self.w
+impl Model {
+    pub fn new(layer_nums: Vec<usize>) -> Model {
+        let mut w: HashMap<(usize, usize, usize, usize), f64> = HashMap::new();
+        if layer_nums.len() < 3 {
+            panic!("3層以上必要だろう！");
+        }
+        for i in 1..layer_nums.len() {
+            for ii in 0..layer_nums[i] {
+                for iii in 0..layer_nums[i - 1] {
+                    w.insert((i - 1, iii, i, ii), 1.0);
+                }
+            }
+        }
+        Model {
+            w: w,
+            layer_nums: layer_nums,
+        }
     }
 }
 
